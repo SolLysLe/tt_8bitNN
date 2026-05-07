@@ -74,6 +74,8 @@ async def test_uart_tx_rx(dut):
     rx_test_data = 0xAA  # 10101010
     for i in range(8):
         bit = (rx_test_data >> i) & 0x1
+        # Cách sửa: sử dụng hàm integer để chuyển đổi
+        current_val = int(dut.uio_in.value)
         dut.uio_in.value = (dut.uio_in.value & 0xFE) | bit
         await Timer(320, units='ns')  # One bit period
     
