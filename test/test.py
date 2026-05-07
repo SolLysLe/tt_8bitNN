@@ -10,7 +10,7 @@ async def test_uart_tx_rx(dut):
     """Test UART TX and RX functionality via Tiny Tapeout pins"""
     
     # Setup 10ns clock (100 MHz)
-    clock = Clock(dut.clk, 10, units="ns")
+    clock = Clock(dut.clk, 10, unit="ns")
     cocotb.start_soon(clock.start())
     
     # Reset
@@ -19,7 +19,7 @@ async def test_uart_tx_rx(dut):
     dut.ui_in.value = 0
     dut.uio_in.value = 0
     
-    await Timer(100, units='ns')
+    await Timer(100, unit='ns')
     dut.rst_n.value = 1
     await RisingEdge(dut.clk)
     
@@ -68,22 +68,21 @@ async def test_uart_tx_rx(dut):
     # Send start bit (0)
     current_value = int(dut.uio_in.value)
     dut.uio_in.value = (current_value & 0xFE) | 0  # Set RX bit to 0
-    await Timer(320, units='ns')  # Wait for one bit period
+    await Timer(320, unit='ns')  # Wait for one bit period
     
     # Send data bits (LSB first)
     rx_test_data = 0xAA  # 10101010
     for i in range(8):
         bit = (rx_test_data >> i) & 0x1
-        # Cách sửa: sử dụng hàm integer để chuyển đổi
+        # SỬA LỖI TẠI ĐÂY: Chuyển đổi sang int trước khi thực hiện phép tính bitwise
         current_val = int(dut.uio_in.value)
-        dut.uio_in.value = (dut.uio_in.value & 0xFE) | bit
-        await Timer(320, units='ns')  # One bit period
-        CS = dut.CS  # Định nghĩa CS là tín hiệu CS của dut
-# ... sau đó mới dùng:
-        dut.CS.value = 1
+        dut.uio_in.value = (current_val & 0xFE) | bit
+        await Timer(320, unit='ns')  # One bit period
+
     # Send stop bit (1)
-    dut.uio_in.value = (dut.uio_in.value & 0xFE) | 1
-    await Timer(320, units='ns')
+    current_val = int(dut.uio_in.value)
+    dut.uio_in.value = (current_val & 0xFE) | 1
+    await Timer(320, unit='ns')
     
     # Wait for RX to process
     for _ in range(50):
@@ -105,4 +104,4 @@ async def test_uart_tx_rx(dut):
     print("Test completed!")
     
     # Final wait
-    await Timer(1000, units='ns')
+    await Timer(1000, unit='ns')
