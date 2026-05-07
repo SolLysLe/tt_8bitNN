@@ -1,12 +1,14 @@
 # Makefile
 # See https://docs.cocotb.org/en/stable/quickstart.html for more info
+# Force RTL simulation during development (comment out for gate-level)
+override GATES := no
 
 # defaults
 SIM ?= icarus
 FST ?= -fst # Use more efficient FST format
 TOPLEVEL_LANG ?= verilog
 SRC_DIR = $(PWD)/../src
-PROJECT_SOURCES = project.v
+PROJECT_SOURCES = project.v uart_top.v
 
 ifneq ($(GATES),yes)
 
