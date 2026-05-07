@@ -78,7 +78,10 @@ async def test_uart_tx_rx(dut):
         current_val = int(dut.uio_in.value)
         dut.uio_in.value = (dut.uio_in.value & 0xFE) | bit
         await Timer(320, units='ns')  # One bit period
-    
+
+        CS = dut.CS  # Định nghĩa CS là tín hiệu CS của dut
+# ... sau đó mới dùng:
+        CS.value = 1
     # Send stop bit (1)
     dut.uio_in.value = (dut.uio_in.value & 0xFE) | 1
     await Timer(320, units='ns')
