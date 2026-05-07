@@ -66,7 +66,8 @@ async def test_uart_tx_rx(dut):
     print("Starting UART RX test...")
     
     # Send start bit (0)
-    dut.uio_in.value = (dut.uio_in.value & 0xFE) | 0  # Set RX bit to 0
+    current_value = int(dut.uio_in.value)
+    dut.uio_in.value = (current_value & 0xFE) | 0  # Set RX bit to 0
     await Timer(320, units='ns')  # Wait for one bit period
     
     # Send data bits (LSB first)
