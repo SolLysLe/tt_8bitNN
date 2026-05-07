@@ -1,6 +1,6 @@
 `default_nettype none //
 
-module uart_top #(
+module uart_top #(  
     parameter WIDTH = 8
 )(
     input  wire clk,
